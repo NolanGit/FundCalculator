@@ -17,6 +17,7 @@ class MailSender(object):
 	def send_it(self):
 		msg=MIMEText(self.content,'plain','utf-8',)
 		msg['From']=formataddr([self.sender_name,self.my_sender])
+		msg['to']='管理员'  
 		msg['Subject']=self.subject
 		server=smtplib.SMTP_SSL("smtp.qq.com", 465)
 		server.login(self.my_sender, self.my_pass)

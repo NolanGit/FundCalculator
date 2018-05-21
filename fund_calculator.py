@@ -1,8 +1,6 @@
 #coding=utf-8
-
 import time
 import itchat
-from bs4 import BeautifulSoup
 from mail_sender import MailSender
 from fund_getter import FundGetter
 
@@ -13,9 +11,10 @@ amount005612=2991.91
 amount005644=1003.87
 my_sender='XXX@qq.com'
 my_pass = 'XXX'	
-ReceiverAddr=['XX@live.com']
-SenderName='FundCalculator'
-Subject='DailyFund'
+receiver_addr=['XXX@live.com']
+sender_name='FundCalculator'
+subject='DailyFund'
+wechat_switch=0  #wechat_switch设置为1时，发送微信消息，否则仅发送邮件通知
 
 def cal(status,extent,amount):
 	result = extent * amount
@@ -50,12 +49,17 @@ while 1:
 		result = result001008 + result040008 + result005612 + result005644
 		print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + '合计：'+ str(result))
 		if result>0:
-			Content=("今日收涨，盈利%s元" %(result))
+			content=("今日收涨，盈利%s元" %(result))
 		else:
-			Content=("今日收跌，亏损%s元" %(-result))
-		mailsender=MailSender(my_sender,my_pass,SenderName,ReceiverAddr,Subject,Content)
+			content=("今日收跌，亏损%s元" %(-result))
+		mailsender=MailSender(my_sender,my_pass,sender_name,receiver_addr,subject,content)
+		if wechat_switch==1:
+			itchat.send((time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))+content),'filehelper')
+			print((time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))+'微信消息发送成功')
+		else:
+			print((time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))+'微信消息开关为关,仅发送邮件')
 		mailsender.send_it()
-		print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + '邮件发送成功，一天后重发')
+		print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + '一天后重发')
 		time.sleep(86400)
 	else:
 		print((time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))+'当前为星期%s非交易日，六小时后重试'%(CurrentWeek))

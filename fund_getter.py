@@ -15,9 +15,9 @@ class FundGetter():
 			content=r.text
 			soup = BeautifulSoup(content, 'lxml') 
 			divs=soup.find_all(class_='red')
-			if divs == None:
+			if divs == []:
 				divs=soup.find_all(class_='green')
-				if divs == None:
+				if divs == []:
 					print('获取失败，记录错误...')
 					print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))+'logging error...')
 					with open('C:\\Users\\sunhaoran\\Documents\\fund_log.txt','a',encoding='UTF-8')as f:
@@ -35,4 +35,6 @@ class FundGetter():
 				break
 		worth=divs[0].get_text()
 		extent=divs[1].get_text()
+		extent=float(extent.strip('%'))
+		extent=extent/100
 		return status,worth,extent

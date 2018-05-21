@@ -11,7 +11,7 @@ class FundGetter():
 		while 1:
 			baseurl='http://so.hexun.com/default.do?type=fund&key='
 			r = requests.get(baseurl+str(self.fundcode))
-			time.sleep(5)  #避免网速低而加载过慢
+			#time.sleep(5)  #避免网速低而加载过慢
 			content=r.text
 			soup = BeautifulSoup(content, 'lxml') 
 			divs=soup.find_all(class_='red')

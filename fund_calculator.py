@@ -26,8 +26,16 @@ def get_daily_result(fundcode,amount):
 	status,worth,extent=fundgetter.get_price()
 	result = extent * amount
 	return result
+
+def get_time():
+	CurrentHour=int(time.strftime('%H',time.localtime(time.time())))
+	CurrentMin=int(time.strftime('%M',time.localtime(time.time())))
+	CurrentTime=CurrentHour+CurrentMin/100
+	CurrentWeek=int(time.strftime('%w',time.localtime(time.time())))
+	return CurrentTime,CurrentWeek
+
 while 1:
-	CurrentTime,CurrentWeek=GetTime()
+	CurrentTime,CurrentWeek=get_time()
 	if CurrentWeek!=0 and CurrentWeek!=6:
 		result001008=get_daily_result('001008',amount001008)
 		amount001008=amount001008+result001008
@@ -45,8 +53,8 @@ while 1:
 			Content=("今日收涨，盈利%s元" %(result))
 		else:
 			Content=("今日收跌，亏损%s元" %(-result))
-		MailSender=MailSender(my_sender,my_pass,SenderName,ReceiverAddr,Subject,Content)
-		MailSender.SendIt()
+		mailsender=MailSender(my_sender,my_pass,SenderName,ReceiverAddr,Subject,Content)
+		mailsender.send_it()
 		print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + '邮件发送成功，一天后重发')
 		time.sleep(86400)
 	else:

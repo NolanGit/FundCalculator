@@ -7,7 +7,6 @@ class FundGetter():
 
 	def __init__(self,fundcode):
 		self.fundcode=fundcode
-		
 	def get_price(self):
 		while 1:
 			baseurl='http://so.hexun.com/default.do?type=fund&key='
@@ -35,10 +34,5 @@ class FundGetter():
 				status=1  #1代表UP
 				break
 		worth=divs[0].get_text()
-		up_and_downs=divs[1].get_text()
-		return status,worth,up_and_downs
-
-
-fundgetter=FundGetter('040008')
-status,worth,up_and_downs=fundgetter.get_price()
-print(status,worth,up_and_downs)
+		extent=divs[1].get_text()
+		return status,worth,extent

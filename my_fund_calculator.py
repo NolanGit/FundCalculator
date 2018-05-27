@@ -46,10 +46,6 @@ for fund in funds:
 
 while 1:
     CurrentTime, CurrentWeek = get_time()
-<<<<<<< HEAD
-=======
-    log_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
->>>>>>> e83f90fa72ffc2786ba8f32d2d35e7ef16f69757
     if CurrentWeek != 0 and CurrentWeek != 6:
         fund_price = [0, 0, 0, 0, 0]
         result = [0, 0, 0, 0, 0]
@@ -68,18 +64,13 @@ while 1:
             i += 1
 
         finalresult = sum(result)
-<<<<<<< HEAD
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(finalresult))
-=======
-        print(log_time + '合计：' + str(finalresult))
->>>>>>> e83f90fa72ffc2786ba8f32d2d35e7ef16f69757
         if finalresult > 0:
             content = ("今日收涨，盈利%s元" % (finalresult))
         else:
             content = ("今日收跌，亏损%s元" % (-finalresult))
         mailsender = MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, content)
         if wechat_switch == 1:
-<<<<<<< HEAD
             itchat.send((time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + content), 'filehelper')
             print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '微信消息发送成功')
         else:
@@ -89,16 +80,5 @@ while 1:
         time.sleep(86400)
     else:
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '当前为星期%s非交易日，六小时后重试' % (CurrentWeek))
-=======
-            itchat.send((log_time + content), 'filehelper')
-            print(log_time + '微信消息发送成功')
-        else:
-            print((log_time) + '微信消息开关为关,仅发送邮件')
-        mailsender.send_it()
-        print(log_time + '一天后重发')
-        time.sleep(86400)
-    else:
-        print(log_time + '当前为星期%s非交易日，六小时后重试' % (CurrentWeek))
->>>>>>> e83f90fa72ffc2786ba8f32d2d35e7ef16f69757
         time.sleep(21600)
 print('程序终止')

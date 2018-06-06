@@ -30,10 +30,10 @@ class FundGetter():
                     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '数据获取失败，五分钟后将重试')
                     time.sleep(300)
                 else:
-                    status = 0  # 0代表DOWN
+                    status = 0  # 0代表跌
                     break
             else:
-                status = 1  # 1代表UP
+                status = 1  # 1代表涨
                 break
         worth = divs[0].get_text()
         extent = divs[1].get_text()

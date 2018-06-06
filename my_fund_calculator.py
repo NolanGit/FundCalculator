@@ -3,7 +3,7 @@ import time
 import itchat
 from mail_sender import MailSender
 from fund_getter import FundGetter
-from data_controller import DataStorager, DataGetter, DataCleanner, DataInitializer
+from data_controller import DataController
 
 funds = ['001008', '040008', '005612', '005644']
 
@@ -33,16 +33,27 @@ def get_time():
     return CurrentTime, CurrentWeek
 
 # itchat.auto_login(hotReload=True)
-fs = DataStorager()
-fs.create_table()
-dg = DataGetter()
-dc = DataCleanner()
-di = DataInitializer()
-i = 0
-dc.clean_data()
-for fund in funds:
-    di.init_data(funds[i])
-    i += 1
+dc = DataController()
+dc.create_table()
+if dc.if_data_need_to_init():
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中没有数据，需要初始化数据')
+    i = 0
+    for fund in funds:
+        dc.init_data(funds[i])
+        i += 1
+else:
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中已经存在数据，无需初始化，表中的基金份额为：')
+    for fund in funds:
+        print(dc.get_data(fund))
+    y_or_n = input(prompt=(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要重新确定份额？Y/N'))
+    if y_or_n == 'Y' or y_or_n == 'y':
+        dc.clean_data()
+        i = 0
+        for fund in funds:
+            dc.init_data(funds[i])
+            i += 1
+    else:
+        pass
 
 while 1:
     CurrentTime, CurrentWeek = get_time()
@@ -51,18 +62,16 @@ while 1:
         result = [0, 0, 0, 0, 0]
         i = 0
         for amount in amounts:
-            amounts[i] = dg.get_data(funds[i])
+            amounts[i] = dc.get_data(funds[i])
             i += 1
-        dc.clean_data()
         i = 0
         for fund in funds:
             fund_price[i], result[i] = get_daily_result(funds[i], amounts[i])
             new_amount = float(amounts[i]) + float(result[i])
             amounts[i] = new_amount
             print('开始保存...')
-            fs.save_data(funds[i], fund_price[i], amounts[i])
+            dc.update_data(funds[i], fund_price[i], amounts[i])
             i += 1
-
         finalresult = sum(result)
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(finalresult))
         if finalresult > 0:
@@ -81,4 +90,4 @@ while 1:
     else:
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '当前为星期%s非交易日，六小时后重试' % (CurrentWeek))
         time.sleep(21600)
-print('程序终止')
+print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '程序终止')

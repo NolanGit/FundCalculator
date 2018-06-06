@@ -35,17 +35,27 @@ class DataController(object):
         cursor.close()
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '保存数据成功')
 
-    def get_data(self, fund_code):
-        # 获取数据
+    def get_fund_amount(self, fund_code):
+        # 获取基金份额
         conn = mysql.connector.connect(user='root', password='root', database='mydatabase')
         cursor = conn.cursor()
         cursor.execute('select fund_amount from fund_data where fund_code = %s', [fund_code])
         fund_amount = cursor.fetchone()
         for fund_am in fund_amount:
             fund_amount = fund_am
-        conn.commit()
         cursor.close()
         return fund_amount
+
+    def get_fund_price(self, fund_code):
+        # 获取基金净值
+        conn = mysql.connector.connect(user='root', password='root', database='mydatabase')
+        cursor = conn.cursor()
+        cursor.execute('select fund_price from fund_data where fund_code = %s', [fund_code])
+        fund_price = cursor.fetchone()
+        for fund_pr in fund_price:
+            fund_price = fund_pr
+        cursor.close()
+        return fund_price
 
     def clean_data(self):
         # 删表
@@ -66,15 +76,14 @@ class DataController(object):
         cursor.close()
         print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '数据库已更新')
 
-    def if_data_need_to_init(self):
+    def if_data_need_to_init(self, length):
         conn = mysql.connector.connect(user='root', password='root', database='mydatabase')
         cursor = conn.cursor()
         cursor.execute('select count(*) from fund_data')
         status = cursor.fetchone()
-        print(status)
         conn.commit()
         cursor.close()
-        if status[0] == 0:
+        if status[0] != length:
             return True
         else:
             return False

@@ -20,9 +20,15 @@ wechat_switch = 0  # wechat_switch设置为1时，发送微信消息，否则仅
 def get_daily_result(fundcode, amount):
     print(fundcode)
     fundgetter = FundGetter(fundcode)
-    status, worth, extent = fundgetter.get_price()
+    today_fund_price, extent = fundgetter.get_price()
+    dc = DataController()
+    yesterday_fund_price = float(dc.get_fund_price(fundcode))
+    if today_fund_price < yesterday_fund_price:
+        extent = -extent
+    else:
+        pass
     result = extent * float(amount)
-    return worth, result
+    return today_fund_price, result
 
 
 def get_time():
@@ -35,8 +41,9 @@ def get_time():
 # itchat.auto_login(hotReload=True)
 dc = DataController()
 dc.create_table()
-if dc.if_data_need_to_init():
+if dc.if_data_need_to_init(len(funds)):
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中没有数据，需要初始化数据')
+    dc.clean_data()
     i = 0
     for fund in funds:
         dc.init_data(funds[i])
@@ -44,8 +51,8 @@ if dc.if_data_need_to_init():
 else:
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中已经存在数据，无需初始化，表中的基金份额为：')
     for fund in funds:
-        print(dc.get_data(fund))
-    y_or_n = input(prompt=(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要重新确定份额？Y/N'))
+        print(dc.get_fund_amount(fund))
+    y_or_n = input(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要重新确定份额？Y/N')
     if y_or_n == 'Y' or y_or_n == 'y':
         dc.clean_data()
         i = 0
@@ -62,7 +69,7 @@ while 1:
         result = [0, 0, 0, 0, 0]
         i = 0
         for amount in amounts:
-            amounts[i] = dc.get_data(funds[i])
+            amounts[i] = dc.get_fund_amount(funds[i])
             i += 1
         i = 0
         for fund in funds:

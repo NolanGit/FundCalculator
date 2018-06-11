@@ -23,10 +23,6 @@ def get_daily_result(fundcode, amount):
     today_fund_price, extent = fundgetter.get_price()
     dc = DataController()
     yesterday_fund_price = float(dc.get_fund_price(fundcode))
-    if today_fund_price < yesterday_fund_price:
-        extent = -extent
-    else:
-        pass
     result = extent * float(amount)
     return today_fund_price, result
 

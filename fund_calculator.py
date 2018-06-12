@@ -18,7 +18,7 @@ wechat_switch = 0  # wechat_switch设置为1时，发送微信消息，否则仅
 
 
 def get_daily_result(fundcode, amount):
-    print(fundcode)
+    print('获取' + fundcode + '净值...')
     fundgetter = FundGetter(fundcode)
     today_fund_price, extent = fundgetter.get_price()
     dc = DataController()
@@ -47,7 +47,7 @@ if dc.if_data_need_to_init(len(funds)):
 else:
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中已经存在数据，无需初始化，表中的基金份额为：')
     for fund in funds:
-        print(dc.get_fund_amount(fund))
+        print(round(dc.get_fund_amount(fund), 2))
     y_or_n = input(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要重新确定份额？Y/N')
     if y_or_n == 'Y' or y_or_n == 'y':
         dc.clean_data()
@@ -57,6 +57,12 @@ else:
             i += 1
     else:
         pass
+y_or_n = input(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要根据当前涨跌重新计算份额并更新数据库？Y/N')
+if y_or_n == 'Y' or y_or_n == 'y':
+    pass
+else:
+    print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '一天后开始更新并发送邮件')
+    time.sleep(21600)
 
 while 1:
     CurrentTime, CurrentWeek = get_time()
@@ -76,12 +82,12 @@ while 1:
             dc.update_data(funds[i], fund_price[i], amounts[i])
             i += 1
         finalresult = sum(result)
-        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(finalresult))
+        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(round(finalresult), 2))
         if finalresult > 0:
-            content = ("今日收涨，盈利%s元" % (finalresult))
+            content = ("今日收涨，盈利%s元" % round((finalresult), 2)
         else:
-            content = ("今日收跌，亏损%s元" % (-finalresult))
-        mailsender = MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, content)
+            content=("今日收跌，亏损%s元" % round((-finalresult), 2)
+        mailsender=MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, content)
         if wechat_switch == 1:
             itchat.send((time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + content), 'filehelper')
             print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '微信消息发送成功')

@@ -47,7 +47,7 @@ if dc.if_data_need_to_init(len(funds)):
 else:
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '表中已经存在数据，无需初始化，表中的基金份额为：')
     for fund in funds:
-        print(round(dc.get_fund_amount(fund), 2))
+        print(fund + '的份额为: ' + str(round(dc.get_fund_amount(fund), 2)))
     y_or_n = input(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '是否需要重新确定份额？Y/N')
     if y_or_n == 'Y' or y_or_n == 'y':
         dc.clean_data()

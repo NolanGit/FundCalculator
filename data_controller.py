@@ -44,7 +44,7 @@ class DataController(object):
         for fund_am in fund_amount:
             fund_amount = fund_am
         cursor.close()
-        return fund_amount
+        return float(fund_amount)
 
     def get_fund_price(self, fund_code):
         # 获取基金净值

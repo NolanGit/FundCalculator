@@ -86,7 +86,7 @@ while 1:
         if finalresult > 0:
             content = ("今日收涨，盈利%s元" % round((finalresult), 2)
         else:
-            content=("今日收跌，亏损%s元" % round((-finalresult), 2)
+            content=("今日收跌，亏损%s元" % round((-finalresult), 2))
         mailsender=MailSender(my_sender, my_pass, sender_name, receiver_addr, subject, content)
         if wechat_switch == 1:
             itchat.send((time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + content), 'filehelper')

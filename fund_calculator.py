@@ -62,7 +62,7 @@ if y_or_n == 'Y' or y_or_n == 'y':
     pass
 else:
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '一天后开始更新并发送邮件')
-    time.sleep(21600)
+    time.sleep(86400)
 
 while 1:
     CurrentTime, CurrentWeek = get_time()
@@ -82,7 +82,7 @@ while 1:
             dc.update_data(funds[i], fund_price[i], amounts[i])
             i += 1
         finalresult = sum(result)
-        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(round(finalresult), 2))
+        print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())) + '合计：' + str(round(finalresult, 2)))
         if finalresult > 0:
             content = ("今日收涨，盈利%s元" % round((finalresult), 2)
         else:

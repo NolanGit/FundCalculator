@@ -60,7 +60,8 @@ class FundCalculatorGUI(BaseWidget):
         lock.release()
 
     def get_current_fund(self):
-        q1.put(dc.get_current_fund_code())
+        current_fund_code=dc.get_current_fund_code()
+        q1.put(current_fund_code)
 
 
 if __name__ == "__main__":

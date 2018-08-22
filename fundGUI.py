@@ -14,9 +14,11 @@ from pyforms.controls import ControlTextArea
 from pyforms.controls import ControlLabel
 from pyforms.controls import ControlTextArea
 from data_controller import DataController
+from fund_getter import FundGetter
 q1 = queue.Queue()
 lock = threading.Lock()
 dc = DataController()
+fg=FundGetter()
 
 
 class FundCalculatorGUI(BaseWidget):

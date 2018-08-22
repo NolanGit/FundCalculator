@@ -87,3 +87,14 @@ class DataController(object):
             return True
         else:
             return False
+
+    def get_current_fund_code(self):
+        conn = mysql.connector.connect(user='root', password='root', database='mydatabase')
+        cursor = conn.cursor()
+        cursor.execute('select fund_code from fund_data')
+        fund_codes = cursor.fetchone()
+        fund_code = []
+        for each_fund_code in fund_codes:
+            fund_code.append(each_fund_code)
+        cursor.close()
+        return float(fund_code)

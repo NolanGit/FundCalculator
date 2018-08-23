@@ -18,7 +18,7 @@ from fund_getter import FundGetter
 q1 = queue.Queue()
 lock = threading.Lock()
 dc = DataController()
-fg=FundGetter()
+fg = FundGetter()
 
 
 class FundCalculatorGUI(BaseWidget):
@@ -32,7 +32,7 @@ class FundCalculatorGUI(BaseWidget):
         self.fund_code = ControlText('Fund Code:')
         self.fund_amount = ControlText('Fund Amount:')
         self.add_fund_button = ControlButton('Add Fund')
-        self.add_fund_button.value= self.add_fund
+        self.add_fund_button.value = self.add_fund
 
         self.sender_address = ControlText('Sender Address:')
         self.sender_password = ControlText('Sender Password:')
@@ -63,13 +63,12 @@ class FundCalculatorGUI(BaseWidget):
         lock.release()
 
     def get_current_fund(self):
-        current_fund_code=str(dc.get_current_fund_code())
-        q1.put('Current Funds are :'+current_fund_code)
+        current_fund_code = str(dc.get_current_fund_code())
+        q1.put('Current Funds are :' + current_fund_code)
 
     def add_fund(self):
-        target_fund_code=self.fund_code.value
-        target_fund_amount=self.fund_amount.value
-
+        target_fund_code = self.fund_code.value
+        target_fund_amount = self.fund_amount.value
 
 
 if __name__ == "__main__":

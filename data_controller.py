@@ -96,5 +96,6 @@ class DataController(object):
         fund_code = []
         for each_fund_code in fund_codes:
             fund_code.append(each_fund_code)
+            print(each_fund_code)
         cursor.close()
-        return float(fund_code)
+        return fund_code

@@ -37,7 +37,3 @@ class FundGetter(object):
         extent = float(num[6:10])
         extent = extent / 100
         return worth, extent
-
-FG = FundGetter('040008')
-a, b = FG.get_price()
-print(a, b)
